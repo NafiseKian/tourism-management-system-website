@@ -1,0 +1,148 @@
+CREATE DATABASE TourSystemDB;
+USE TourSystemDB;
+
+CREATE TABLE users (
+    user_id INT(15) AUTO_INCREMENT,
+    name varchar(40) NOT NULL,
+    surname varchar(40) NOT NULL,
+    username varchar(50) UNIQUE NOT NULL,
+    email varchar(30) NOT NULL,
+    phonenum varchar(25) NOT NULL,
+    address varchar(30) NOT NULL,
+    password varchar(255) NOT NULL,
+    PRIMARY KEY(user_id)
+);
+
+INSERT INTO users (name,surname,username,email,phonenum,address,password) VALUES 
+('zaid','mohtaseb','zaidmoh','zaidMoh@gmail.com','05335809248','nicosia-ortakoy','702e0791e8cfd64c80d35e9450145e69ef0864dccf33b64bf65eccfd29ef5216'),
+('yazeed','jaber','yazeedjab','yazeedJab@gmail.com','05489875428','nicosia-haspolat','94c52bc247ad21170b0a6332f7060af7eea44a4748dcb573f2e45869bec1e391'),
+('nafise','jeries','nafisejer','nafisejer@gmail.com','05489875412','nicosia-oldCity','210003480d977e75de5efcc3898debc4550996fa3ff43368d81d143a4c323c20');
+
+CREATE TABLE activity(
+  activity_id int(15) NOT NULL,
+  activity_name varchar(50) NOT NULL,
+  activity_season varchar(50) NOT NULL,
+  number_of_members int NOT NULL,
+  PRIMARY KEY (activity_id)
+);
+
+INSERT INTO activity
+(activity_id, activity_name, activity_season, number_of_members) VALUES
+(500, 'surfing', 'summer', 5),
+(501, 'hiking', 'summer', 7),
+(502, 'jet ski', 'summer', 4),
+(503, 'museum', 'winter', 8),
+(504, 'club', 'winter', 50),
+(505, 'strawbarry festival', 'spring', 60),
+(506, 'hillarion castele', 'spring', 30),
+(507, 'visit the lake', 'spring', 20),
+(508, 'kantara castle', 'spring', 30),
+(509, 'church of kirpaz', 'winter', 40),
+(510, 'visit kirpaz', 'summer', 50),
+(511, 'old citiy of lefkosa', 'winter', 60),
+(512, 'castle of magusa', 'winter', 50);
+
+CREATE TABLE booking (
+    booking_id INT AUTO_INCREMENT PRIMARY KEY,
+    tour_id INT,
+    city VARCHAR(255),
+    activity_name VARCHAR(255),
+    activity_season VARCHAR(255),
+    hotel_name VARCHAR(255),
+    street VARCHAR(255),
+    price DECIMAL(10, 2),
+    phone VARCHAR(255),
+    booking_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (tour_id) REFERENCES tours(tour_id)
+);
+
+
+CREATE TABLE hotels(
+  hotel_id int NOT NULL,
+  hotel_name varchar(25) NOT NULL,
+  city varchar(25) NOT NULL,
+  street varchar(25) NOT NULL,
+  phone int NOT NULL,
+  type varchar(25) NOT NULL,
+  number_of_employees int NOT NULL,
+  PRIMARY KEY (hotel_id)
+);
+
+INSERT INTO hotels (hotel_id, hotel_name, city, street, phone, type,number_of_employees) VALUES
+(1, 'concorde tower', 'lefkosa', 'gonyeli', 533335979, 'luxury', 659),
+(2, 'concorde resort', 'iskele', 'bafra', 533456622, 'luxury', 1500),
+(3, 'Elexus', 'girne', 'catalkoy', 533879643, 'luxury', 1200),
+(4, 'acapulco', 'girne', 'catalkoy', 533698745, 'standard', 900),
+(5, 'lord palac', 'girne', 'city center', 533950321, 'middle', 600),
+(6, 'The arkin ', 'iskele', 'long beach', 533215665, 'luxury', 1000),
+(7, 'salamis hotel  ', 'magusa', 'salamis ', 533269174, 'middle', 870),
+(8, 'caesar resort ', 'iskele ', 'long beach', 533694105, 'standard', 400),
+(9, 'merit lefkosa', 'lefkosa', 'city center', 533298541, 'middle', 560);
+
+
+CREATE TABLE rooms (
+  room_number int NOT NULL,
+  hotel int NOT NULL,
+  view varchar(25) NOT NULL,
+  number_of_beds int NOT NULL,
+  type varchar(25) NOT NULL,
+  PRIMARY KEY (room_number),
+  KEY `rmfk` (hotel)
+);
+
+INSERT INTO rooms (room_number, hotel, view, number_of_beds, type) VALUES
+(233, 1, 'mountains', 1, 'premium'),
+(344, 1, 'city view', 2, 'luxury'),
+(773, 2, 'sea view', 1, 'premium'),
+(566, 2, 'mountains', 1, 'standard'),
+(346, 3, 'sea view', 2, 'luxury'),
+(676, 3, 'mountains', 1, 'standard'),
+(126, 4, 'sea view', 2, 'premium'),
+(666, 4, 'mountains', 1, 'standard'),
+(866, 5, 'sea view', 3, 'luxury'),
+(342, 5, 'mountains', 2, 'standard'),
+(576, 6, 'port view', 2, 'luxury'),
+(234, 2, 'city view', 1, 'standard'),
+(832, 7, 'sea view', 3, 'standard'),
+(343, 1, 'city view', 2, 'luxury'),
+(348, 1, 'city view', 2, 'luxury'),
+(772, 2, 'sea view', 1, 'premium');
+
+
+CREATE TABLE services (
+  service_id int NOT NULL,
+  service_name varchar(25) NOT NULL,
+  meal_name varchar(25) NOT NULL,
+  drink_name varchar(25) NOT NULL,
+  dessert_name varchar(25) NOT NULL,
+  PRIMARY KEY (service_id)
+);
+
+INSERT INTO services (service_id, service_name, meal_name, drink_name, dessert_name) VALUES
+(600, 'breakfast', 'avocado toast', 'coffee', 'pancakes'),
+(601, 'lunch', 'pizza', 'cola', 'baklava'),
+(602, 'dinner', 'steak', 'wine', 'suffle'),
+(603, 'snack', 'chips', 'cola', 'kunafe');
+
+CREATE TABLE tours (
+  tour_id int NOT NULL,
+  hotel_id int NOT NULL,
+  activity_id int NOT NULL,
+  service_id int NOT NULL,
+  price int NOT NULL,
+  city varchar(20) NOT NULL,
+  PRIMARY KEY (tour_id),
+  KEY ht (hotel_id),
+  KEY act (activity_id),
+  KEY srv (service_id)
+);
+
+INSERT INTO tours (tour_id, hotel_id, activity_id, service_id, price, city) VALUES
+ (1, 1, 511, 600, 800, 'lefkosa'),
+ (2, 2, 505, 602, 900, 'bafra'),
+ (3, 3, 506, 603, 1000, 'girne'),
+ (4, 6, 502, 603, 780, 'iskele'),
+ (5, 7, 512, 603, 800, 'magusa'),
+ (6, 8, 505, 602, 1200, 'lefke'),
+ 
+
